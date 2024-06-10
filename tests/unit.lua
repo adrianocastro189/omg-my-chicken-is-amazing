@@ -28,6 +28,10 @@ BaseTestClass = {
 
         dofile('./OmgMyChickenIsAmazing.lua')
 
+        dofile('./src/Repositories/ChickenFinderRepository/AbstractChickenFinderRepository.lua')
+        dofile('./src/Repositories/ChickenFinderRepository/ClassicEraChickenFinderRepository.lua')
+        dofile('./src/Repositories/ChickenFinderRepository/RetailChickenFinderRepository.lua')
+
         function dd(...) AmazingChicken.__:dd(...) end
     end,
 
@@ -40,6 +44,10 @@ BaseTestClass = {
 }
 
 dofile('./tests/OmgMyChickenIsAmazingTest.lua')
+
+dofile('./tests/Repositories/ChickenFinderRepository/AbstractChickenFinderRepositoryTest.lua')
+dofile('./tests/Repositories/ChickenFinderRepository/ClassicEraChickenFinderRepositoryTest.lua')
+dofile('./tests/Repositories/ChickenFinderRepository/RetailChickenFinderRepositoryTest.lua')
 
 lu.ORDER_ACTUAL_EXPECTED=false
 
