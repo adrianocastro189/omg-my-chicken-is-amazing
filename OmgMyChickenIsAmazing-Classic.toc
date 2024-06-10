@@ -6,3 +6,5 @@
 ## Version: 0.0.1-alpha
 
 lib\stormwind-library.lua
+
+OmgMyChickenIsAmazing.lua
