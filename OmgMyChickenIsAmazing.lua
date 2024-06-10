@@ -3,6 +3,9 @@ local __ = StormwindLibrary_v1_4_0.new({
         primary = 'CC7E0E'
     },
     command = 'amazingchicken',
+    inventory = {
+        track = true,
+    },
     name = 'OMG! My Chicken is amazing!'
 })
 

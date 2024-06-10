@@ -10,3 +10,4 @@ lib\stormwind-library.lua
 OmgMyChickenIsAmazing.lua
 
 src\Repositories\ChickenFinderRepository\AbstractChickenFinderRepository.lua
+src\Repositories\ChickenFinderRepository\ClassicEraChickenFinderRepository.lua
