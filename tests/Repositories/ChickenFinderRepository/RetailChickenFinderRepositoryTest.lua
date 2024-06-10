@@ -9,7 +9,7 @@ TestRetailChickenFinderRepository = BaseTestClass:new()
     -- @covers RetailChickenFinderRepository:playerHasChicken()
     -- @TODO: To be implemented in the future <2024.06.10>
     function TestRetailChickenFinderRepository:testPlayerHasChicken()
-        local instance = AmazingChicken.__:new('OmgAbstractChickenFinderRepository')
+        local instance = AmazingChicken.__:new('OmgRetailChickenFinderRepository')
 
         -- abstract method
         lu.assertError(function() instance:playerHasChicken() end)
