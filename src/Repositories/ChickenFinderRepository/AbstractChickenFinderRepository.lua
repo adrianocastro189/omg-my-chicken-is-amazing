@@ -18,6 +18,15 @@ local AbstractChickenFinderRepository = {}
     function AbstractChickenFinderRepository.__construct()
         return setmetatable({}, AbstractChickenFinderRepository)
     end
+
+    --[[
+    Determines whether the player has the Westfall chicken or not.
+
+    @treturn boolean
+    ]]
+    function AbstractChickenFinderRepository:playerHasChicken()
+        error('This is an abstract method and should be implemented by this class inheritances')
+    end
 -- end of AbstractChickenFinderRepository
 
 -- allows this class to be extended by registering it to the factory
