@@ -28,4 +28,4 @@ clarified in the future
 ### yyyy.mm.dd - version 0.0.1-alpha
 
 * First addon version with:
-   * 
+   * Initialization method and core table instance
