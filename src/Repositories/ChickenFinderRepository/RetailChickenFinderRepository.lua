@@ -22,6 +22,8 @@ RetailChickenFinderRepository.__index = RetailChickenFinderRepository
     --[[
     @inheritDoc
     @codeCoverageIgnore
+
+    @TODO: To be implemented in the future <2024.06.10>
     ]]
     function RetailChickenFinderRepository:playerHasChicken()
         error('To be implemented in future versions')
