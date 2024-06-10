@@ -2,4 +2,4 @@
 
 A very simple World of Warcraft addon to always remind players to summon their Westfall Chicken.
 
-## 🏗️ Work in progress
+🏗️ Work in progress
