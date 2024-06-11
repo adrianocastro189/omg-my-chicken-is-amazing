@@ -15,5 +15,6 @@ AmazingChicken.__ = __
 local events = __.events
 
 events:listen(events.EVENT_NAME_PLAYER_LOGIN, function ()
-    AmazingChicken.__.output:out('Temporary message to indicate the addon was loaded')
+    -- initializes the chicken finder repository singleton
+    AmazingChicken.chickenFinderRepository = AmazingChicken.__:new('OmgChickenFinderRepository')
 end)
