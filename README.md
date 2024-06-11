@@ -25,7 +25,7 @@ clarified in the future
 
 ## Changelog
 
-### yyyy.mm.dd - version 0.0.1-alpha
+### 2024.06.11 - version 0.0.1-alpha
 
 * First addon version with:
    * Initialization method and core table instance
