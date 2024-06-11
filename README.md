@@ -30,3 +30,4 @@ clarified in the future
 * First addon version with:
    * Initialization method and core table instance
    * Chicken finder repository structure
+   * Temporary welcome message
