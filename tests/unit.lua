@@ -32,6 +32,10 @@ BaseTestClass = {
         dofile('./src/Repositories/ChickenFinderRepository/ClassicEraChickenFinderRepository.lua')
         dofile('./src/Repositories/ChickenFinderRepository/RetailChickenFinderRepository.lua')
 
+        -- initializes the addon
+        AmazingChicken.__.output:setTestingMode()
+        AmazingChicken.__.events:handleOriginal(nil, 'PLAYER_LOGIN')
+
         function dd(...) AmazingChicken.__:dd(...) end
     end,
 
