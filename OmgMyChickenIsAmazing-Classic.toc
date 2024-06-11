@@ -4,6 +4,7 @@
 ## Notes: A very simple addon to always remind players to summon their Westfall chicken.
 ## Title: OMG! My Chicken is amazing! |cffffee770.0.1-alpha|r
 ## Version: 0.0.1-alpha
+## X-Curse-Project-ID: 1034980
 
 lib\stormwind-library.lua
 
