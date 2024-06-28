@@ -3,10 +3,7 @@ The AbstractChickenFinderRepository implementation for the Classic Era client.
 ]]
 local ClassicEraChickenFinderRepository = {}
 ClassicEraChickenFinderRepository.__index = ClassicEraChickenFinderRepository
-    -- ClassicEraChickenFinderRepository inherits from AbstractChickenFinderRepository
-    setmetatable(ClassicEraChickenFinderRepository, AmazingChicken.__:getClass('OmgAbstractChickenFinderRepository'))
-    AmazingChicken.__:addClass('OmgClassicEraChickenFinderRepository', ClassicEraChickenFinderRepository, AmazingChicken.__.environment.constants.TEST_SUITE)
-    AmazingChicken.__:addClass('OmgChickenFinderRepository', ClassicEraChickenFinderRepository, {
+    AmazingChicken.__:addChildClass('Omg/ChickenFinderRepository', ClassicEraChickenFinderRepository, 'Omg/AbstractChickenFinderRepository', {
         AmazingChicken.__.environment.constants.TEST_SUITE,
         AmazingChicken.__.environment.constants.CLIENT_CLASSIC_ERA,
     })
