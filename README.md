@@ -25,7 +25,7 @@ clarified in the future
 
 ## Changelog
 
-### yyyy.mm.dd - version 0.0.2-alpha
+### 2024.06.28 - version 0.0.2-alpha
 
 * Update Stormwind Library to version 1.6.0
 * Update important structures to use improved library features, most precisely
