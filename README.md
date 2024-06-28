@@ -27,6 +27,10 @@ clarified in the future
 
 ### yyyy.mm.dd - version 0.0.2-alpha
 
+* Update Stormwind Library to version 1.6.0
+* Update important structures to use improved library features, most precisely
+  in the class inheritance system
+
 ### 2024.06.11 - version 0.0.1-alpha
 
 * First addon version with:

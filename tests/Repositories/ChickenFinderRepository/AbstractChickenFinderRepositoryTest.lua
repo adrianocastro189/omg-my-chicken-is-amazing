@@ -1,7 +1,7 @@
 TestAbstractChickenFinderRepository = BaseTestClass:new()
     -- @covers AbstractChickenFinderRepository:__construct()
     function TestAbstractChickenFinderRepository:testConstruct()
-        local instance = AmazingChicken.__:new('OmgAbstractChickenFinderRepository')
+        local instance = AmazingChicken.__:getClass('Omg/AbstractChickenFinderRepository').__construct()
 
         lu.assertNotNil(instance)
 

@@ -16,7 +16,7 @@ local events = __.events
 
 events:listen(events.EVENT_NAME_PLAYER_LOGIN, function ()
     -- initializes the chicken finder repository singleton
-    AmazingChicken.chickenFinderRepository = AmazingChicken.__:new('OmgChickenFinderRepository')
+    AmazingChicken.chickenFinderRepository = AmazingChicken.__:new('Omg/ChickenFinderRepository')
 
     --[[
     This method will output the given message to the chat frame.
