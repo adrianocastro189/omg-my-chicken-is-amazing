@@ -51,7 +51,7 @@ Cataclysm Classic clients. Hope to find a solution in the future.
 
 ## Changelog
 
-### 2024.07.09 - version 0.0.3-alpha
+### yyyy.mm.dd - version 0.0.3-alpha
 
 * Add support for Cataclysm Classic and Retail clients
 * Add the first player interaction with the chicken
