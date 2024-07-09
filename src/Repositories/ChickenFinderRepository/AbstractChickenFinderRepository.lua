@@ -30,4 +30,4 @@ local AbstractChickenFinderRepository = {}
 -- end of AbstractChickenFinderRepository
 
 -- allows this class to be extended by registering it to the factory
-AmazingChicken.__:addAbstractClass('Omg/AbstractChickenFinderRepository', AbstractChickenFinderRepository)
+AmazingChicken:addAbstractClass('Omg/AbstractChickenFinderRepository', AbstractChickenFinderRepository)

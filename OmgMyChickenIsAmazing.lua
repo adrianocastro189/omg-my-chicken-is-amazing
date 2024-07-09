@@ -1,4 +1,4 @@
-local __ = StormwindLibrary_v1_8_0.new({
+AmazingChicken = StormwindLibrary_v1_8_0.new({
     colors = {
         primary = 'CC7E0E'
     },
@@ -9,14 +9,11 @@ local __ = StormwindLibrary_v1_8_0.new({
     name = 'OMG! My Chicken is amazing!'
 })
 
-AmazingChicken = {}
-AmazingChicken.__ = __
-
-local events = __.events
+local events = AmazingChicken.events
 
 events:listen(events.EVENT_NAME_PLAYER_LOGIN, function ()
     -- initializes the chicken finder repository singleton
-    AmazingChicken.chickenFinderRepository = AmazingChicken.__:new('Omg/ChickenFinderRepository')
+    AmazingChicken.chickenFinderRepository = AmazingChicken:new('Omg/ChickenFinderRepository')
 
     --[[
     This method will output the given message to the chat frame.
@@ -26,7 +23,7 @@ events:listen(events.EVENT_NAME_PLAYER_LOGIN, function ()
     case the addon is used in another context, like a test environment.
     ]]
     function AmazingChicken:out(message)
-        AmazingChicken.__.output:out(message)
+        AmazingChicken.output:out(message)
       end
 
     --[[
@@ -45,7 +42,7 @@ events:listen(events.EVENT_NAME_PLAYER_LOGIN, function ()
         AmazingChicken:out('Aww =( my chicken is not in my bags...')
     end
 
-    if AmazingChicken.__.environment:inGame() then
+    if AmazingChicken.environment:inGame() then
         -- we want this call to be made only when the player is in the game
         -- so tests won't be affected by it
         AmazingChicken:showWelcomeMessage()

@@ -1,8 +1,8 @@
 TestRetailChickenFinderRepository = BaseTestClass:new()
     -- helper method to instantiate the classic implementation
     function TestRetailChickenFinderRepository:instance()
-        AmazingChicken.__.environment.getClientFlavor = function () return AmazingChicken.__.environment.constants.CLIENT_RETAIL end
-        return AmazingChicken.__:new('Omg/ChickenFinderRepository')
+        AmazingChicken.environment.getClientFlavor = function () return AmazingChicken.environment.constants.CLIENT_RETAIL end
+        return AmazingChicken:new('Omg/ChickenFinderRepository')
     end
 
     -- @covers RetailChickenFinderRepository:__construct()
