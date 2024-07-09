@@ -28,6 +28,8 @@ BaseTestClass = {
 
         dofile('./OmgMyChickenIsAmazing.lua')
 
+        dofile('./src/Interactions.lua')
+
         dofile('./src/Repositories/ChickenFinderRepository/AbstractChickenFinderRepository.lua')
         dofile('./src/Repositories/ChickenFinderRepository/ClassicEraChickenFinderRepository.lua')
         dofile('./src/Repositories/ChickenFinderRepository/RetailChickenFinderRepository.lua')
@@ -48,6 +50,8 @@ BaseTestClass = {
 }
 
 dofile('./tests/OmgMyChickenIsAmazingTest.lua')
+
+dofile('./tests/InteractionsTest.lua')
 
 dofile('./tests/Repositories/ChickenFinderRepository/AbstractChickenFinderRepositoryTest.lua')
 dofile('./tests/Repositories/ChickenFinderRepository/ClassicEraChickenFinderRepositoryTest.lua')
