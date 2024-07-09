@@ -15,11 +15,19 @@ TestRetailChickenFinderRepository = BaseTestClass:new()
     end
 
     -- @covers RetailChickenFinderRepository:playerHasChicken()
-    -- @TODO: To be implemented in the future <2024.06.10>
     function TestRetailChickenFinderRepository:testPlayerHasChicken()
         local instance = self:instance()
 
-        -- abstract method
-        lu.assertError(function() instance:playerHasChicken() end)
+        instance.petJournal = {
+            playerOwnsPet = function (self, speciesId)
+                instance.speciesIdArg = speciesId
+                return true
+            end
+        }
+
+        local result = instance:playerHasChicken()
+
+        lu.assertTrue(result)
+        lu.assertEquals(84, instance.speciesIdArg)
     end
 -- end of TestRetailChickenFinderRepository
