@@ -13,16 +13,18 @@ RetailChickenFinderRepository.__index = RetailChickenFinderRepository
     RetailChickenFinderRepository constructor.
     ]]
     function RetailChickenFinderRepository.__construct()
-        return setmetatable({}, RetailChickenFinderRepository)
+        local instance = setmetatable({}, RetailChickenFinderRepository)
+
+        instance.petJournal = AmazingChicken:new('PetJournal')
+        instance.westfallChickenSpeciesId = 84
+
+        return instance
     end
 
     --[[
     @inheritDoc
-    @codeCoverageIgnore
-
-    @TODO: To be implemented in the future <2024.06.10>
     ]]
     function RetailChickenFinderRepository:playerHasChicken()
-        error('To be implemented in future versions')
+        return self.petJournal:playerOwnsPet(self.westfallChickenSpeciesId)
     end
 -- end of RetailChickenFinderRepository
