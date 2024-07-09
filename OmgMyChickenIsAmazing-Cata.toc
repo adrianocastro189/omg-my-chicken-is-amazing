@@ -1,5 +1,5 @@
 ## Author: Adriano Castro
-## Interface: 11502
+## Interface: 40400
 ## Name: OMG! My Chicken is amazing!
 ## Notes: A very simple addon to always remind players to summon their Westfall chicken.
 ## Title: OMG! My Chicken is amazing! |cffffee770.0.3-alpha|r
