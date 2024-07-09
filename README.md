@@ -27,6 +27,7 @@ clarified in the future
 
 ### yyyy.mm.dd - version 0.0.3-alpha
 
+* Add the first player interaction with the chicken
 * Add support for Cataclysm Classic and Retail clients
 * Identify whether the Westfall Chicken is summoned or not
 * Update Stormwind Library to version 1.8.0
