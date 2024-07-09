@@ -6,12 +6,19 @@ TestInteractions = BaseTestClass:new()
         lu.assertNotNil(instance)
     end
 
+    -- @covers Interactions:createInterval()
+    function TestInteractions:testCreateInterval()
+        local instance = AmazingChicken:new('Omg/Interactions')
+
+        lu.assertNotIsNil(instance:createInterval())
+    end
+
     -- @covers Interactions:lament()
     function TestInteractions:testLament()
         local function execution(playerHasChicken, playerChickenIsSummoned, expectedMethod)
             AmazingChicken.chickenFinderRepository = {
                 playerHasChicken = function (self) return playerHasChicken end,
-                playerChickenIsSummoned = function (self) return playerChickenIsSummoned end
+                isChickenSummoned = function (self) return playerChickenIsSummoned end
             }
 
             local instance = AmazingChicken:new('Omg/Interactions')
@@ -100,9 +107,16 @@ TestInteractions = BaseTestClass:new()
 
     -- @covers Interactions:registerInterval()
     function TestInteractions:testRegisterInterval()
-        -- @TODO: Implement this method in CA7 <2024.07.09>
         local instance = AmazingChicken:new('Omg/Interactions')
 
+        local interval = AmazingChicken:new('Interval')
+        interval.start = function () interval.startInvoked = true end
+
+        instance.createInterval = function () return interval end
+
         lu.assertEquals(instance:registerInterval(), instance)
+        lu.assertEquals(60, interval.seconds)
+        lu.assertIsFunction(interval.callback)
+        lu.assertTrue(interval.startInvoked)
     end
 -- end of TestInteractions

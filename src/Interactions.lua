@@ -16,6 +16,15 @@ local Interactions = {}
     end
 
     --[[
+    Creates an interval instance.
+
+    This method is here to make it easier to mock the interval creation.
+    ]]
+    function Interactions:createInterval()
+        return AmazingChicken:new('Interval')
+    end
+
+    --[[
     Laments something about the player's Westfall chicken.
     ]]
     function Interactions:lament()
@@ -26,7 +35,7 @@ local Interactions = {}
             return
         end
 
-        if not repository:playerChickenIsSummoned() then
+        if not repository:isChickenSummoned() then
             self:lamentChickenAbsence()
             return
         end
@@ -71,7 +80,11 @@ local Interactions = {}
     @treturn self
     ]]
     function Interactions:registerInterval()
-        -- @TODO: Implement this method in CA7 <2024.07.09>
+        self:createInterval()
+            :setCallback(function () self:maybeLament() end)
+            :setSeconds(60)
+            :start()
+        
         return self
     end
 -- end of Interactions
