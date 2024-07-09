@@ -25,6 +25,10 @@ clarified in the future
 
 ## Changelog
 
+### yyyy.mm.dd - version 0.0.3-alpha
+
+* Update Stormwind Library to version 1.8.0
+
 ### 2024.06.28 - version 0.0.2-alpha
 
 * Update Stormwind Library to version 1.6.0

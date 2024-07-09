@@ -1,14 +1,14 @@
 
 --- Stormwind Library
 -- @module stormwind-library
-if (StormwindLibrary_v1_6_0) then return end
+if (StormwindLibrary_v1_8_0) then return end
         
-StormwindLibrary_v1_6_0 = {}
-StormwindLibrary_v1_6_0.__index = StormwindLibrary_v1_6_0
+StormwindLibrary_v1_8_0 = {}
+StormwindLibrary_v1_8_0.__index = StormwindLibrary_v1_8_0
 
-function StormwindLibrary_v1_6_0.new(props)
-    local self = setmetatable({}, StormwindLibrary_v1_6_0)
-    -- Library version = '1.6.0'
+function StormwindLibrary_v1_8_0.new(props)
+    local self = setmetatable({}, StormwindLibrary_v1_8_0)
+    -- Library version = '1.8.0'
 
 --[[--
 Dumps the values of variables and tables in the output, then dies.
@@ -226,6 +226,26 @@ local Arr = {}
     end
 
     --[[--
+    Determines whether a table has a key or not.
+
+    This method is a simple wrapper around the get() method, checking if the
+    value returned is not nil. It also accepts a dot notation key.
+
+    @tparam table list the table to be checked
+    @tparam string key a dot notation key to be used in the search
+
+    @treturn boolean whether the key is in the table or not
+
+    @usage
+        local list = {a = {b = {c = 1}}}
+        local hasKey = library.arr:hasKey(list, 'a.b.c')
+        -- hasKey = true
+    ]]
+    function Arr:hasKey(list, key)
+        return self:get(list, key) ~= nil
+    end
+
+    --[[--
     Combines the elements of a table into a single string, separated by
     a specified delimiter.
     
@@ -387,7 +407,7 @@ local Arr = {}
         -- list = {a = {b = {c = 1}}}
     ]]
     function Arr:maybeInitialize(list, key, initialValue)
-        if self:get(list, key) == nil then self:set(list, key, initialValue) end
+        if not self:hasKey(list, key) then self:set(list, key, initialValue) end
     end
 
     --[[--
@@ -1084,6 +1104,78 @@ end
 
 
 --[[--
+The Interval class is a utility class that is capable of executing a given
+function at a specified interval.
+
+It uses the World of Warcraft API ticker in the background to mimic the
+setInterval() function in JavaScript. And different from other support
+classes, Interval is an instance based class, which means it requires one
+instance per interval, allowing multiple intervals to be run at the same time.
+
+@classmod Support.Interval
+]]
+local Interval = {}
+    Interval.__index = Interval
+    Interval.__ = self
+    self:addClass('Interval', Interval)
+
+    --[[--
+    Interval constructor.
+    ]]
+    function Interval.__construct()
+        return setmetatable({}, Interval)
+    end
+
+    --[[--
+    Sets the callback to be executed at each interval.
+
+    @tparam function value the callback to be executed at each interval
+
+    @treturn Support.Interval self
+    ]]
+    function Interval:setCallback(value)
+        self.callback = value
+        return self
+    end
+
+    --[[--
+    Sets the number of seconds between each interval.
+
+    @tparam integer value the number of seconds between each interval
+
+    @treturn Support.Interval self
+    ]]
+    function Interval:setSeconds(value)
+        self.seconds = value
+        return self
+    end
+
+    --[[--
+    Starts the interval.
+
+    @treturn Support.Interval self
+    ]]
+    function Interval:start()
+        self.ticker = C_Timer.NewTicker(self.seconds, self.callback)
+        return self
+    end
+
+    --[[--
+    Stops the interval if it's running.
+
+    @treturn Support.Interval self
+    ]]
+    function Interval:stop()
+        if self.ticker then
+            self.ticker:Cancel()
+        end
+        
+        return self
+    end
+-- end of Interval
+
+
+--[[--
 The Configuration class is responsible for managing the addon's
 configurations, settings, options, and anything else that can be persisted
 in the table used by the game client to store saved variables.
@@ -1377,6 +1469,28 @@ local Output = {}
     end
 
     --[[--
+    Outputs an error message using the game's error frame.
+
+    The error frame by default is a red message that appears in the
+    middle of the screen, usually used for errors that need the user's
+    attention like attempting to use an ability that is on cooldown or
+    trying to mount in a place where it's not allowed.
+
+    If, for some reason, the error frame is not available, it will fall back
+    to the default output method.
+
+    @tparam string message The error message to be printed
+    ]]
+    function Output:error(message)
+        if self.__.arr:hasKey(_G, 'UIErrorsFrame.AddMessage') then
+            UIErrorsFrame:AddMessage(message, 1.0, 0.1, 0.1)
+            return
+        end
+
+        self:out('Error: '..message)
+    end
+
+    --[[--
     Formats a standard message with the addon name to be printed.
 
     @tparam string message The message to be formatted
@@ -1445,6 +1559,18 @@ local Output = {}
     ]]
     function Output:printed(message)
         return self.__.arr:inArray(self.history or {}, message)
+    end
+
+    --[[--
+    Sends a chat message which is equal to use /s in the game.
+
+    In other words, when called, this method will make the character say the
+    message in the chat.
+
+    @tparam string message The message to be said
+    ]]
+    function Output:say(message)
+        SendChatMessage(message, 'SAY')
     end
 
     --[[--
@@ -1991,6 +2117,28 @@ self.events = self:new('Events')
 
 local events = self.events
 
+-- the Stormwind Library event triggered when a player engages in combat
+events.EVENT_NAME_PLAYER_ENTERED_COMBAT = 'PLAYER_ENTERED_COMBAT'
+
+-- the Stormwind Library event triggered when a player leaves combat
+events.EVENT_NAME_PLAYER_LEFT_COMBAT = 'PLAYER_LEFT_COMBAT'
+
+-- handles the World of Warcraft PLAYER_REGEN_DISABLED event
+events:listenOriginal('PLAYER_REGEN_DISABLED', function ()
+    self.currentPlayer:setInCombat(true)
+
+    events:notify(events.EVENT_NAME_PLAYER_ENTERED_COMBAT)
+end)
+
+-- handles the World of Warcraft PLAYER_REGEN_ENABLED event
+events:listenOriginal('PLAYER_REGEN_ENABLED', function ()
+    self.currentPlayer:setInCombat(false)
+
+    events:notify(events.EVENT_NAME_PLAYER_LEFT_COMBAT)
+end)
+
+local events = self.events
+
 -- the Stormwind Library event triggered when a player levels up
 events.EVENT_NAME_PLAYER_LEVEL_UP = 'PLAYER_LEVEL_UP'
 
@@ -2072,6 +2220,74 @@ end
 events:listenOriginal('PLAYER_TARGET_CHANGED', function ()
     events:playerTargetChangedListener()
 end)
+
+--[[--
+Facade for the PetJournal API.
+
+Although C_PetJournal is available in the CLASSIC_ERA clients, this facade is
+not instantiable there considering that its functions are not functional. For
+that reason, StormwindLibrary won't hold a default instance of this class like
+it does for other facades. Instead, addons must create their own instances of
+this class when needed.
+
+@classmod Facades.PetJournal
+]]
+local PetJournal = {}
+    PetJournal.__index = PetJournal
+    PetJournal.__ = self
+    self:addClass('PetJournal', PetJournal, {
+        self.environment.constants.TEST_SUITE,
+        self.environment.constants.CLIENT_CLASSIC,
+        self.environment.constants.CLIENT_RETAIL,
+    })
+
+    --[[--
+    PetJournal constructor.
+    ]]
+    function PetJournal.__construct()
+        return setmetatable({}, PetJournal)
+    end
+
+    --[[--
+    Gets the species id of the pet currently summoned by the player.
+
+    If the player has no pet summoned, this method returns nil.
+
+    Note that this method doesn't return the pet identifier, or GUID, which
+    means the returned id is the species id of the pet, not the pet itself.
+
+    @treturn integer|nil The currently summoned pet species id, or nil if no pet is summoned
+    ]]
+    function PetJournal:getSummonedPetSpeciesId()
+        local petGuid = C_PetJournal.GetSummonedPetGUID()
+
+        if petGuid then
+            -- this sanity check is necessary to avoid Lua errors in case no
+            -- pet is summoned
+            return C_PetJournal.GetPetInfoByPetID(petGuid)
+        end
+
+        return nil
+    end
+
+    --[[--
+    Determines whether the player has at least one pet from a given species.
+
+    The C_PetJournal.GetOwnedBattlePetString() API method returns a colored
+    string containing the number of pets owned by the player for a given
+    species. Example: "|cFFFFD200Collected (1/3)"
+
+    This method just checks if the string is not nil, which means the player
+    has at least one pet from the given species.
+
+    @tparam integer speciesId The species ID of the pet to check
+
+    @treturn boolean Whether the player owns at least one pet from the given species
+    ]]
+    function PetJournal:playerOwnsPet(speciesId)
+        return C_PetJournal.GetOwnedBattlePetString(speciesId) ~= nil
+    end
+-- end of PetJournal
 
 --[[--
 The target facade maps all the information that can be retrieved by the
@@ -2314,7 +2530,7 @@ local AbstractTooltip = {}
     end
 
     --[[--
-    Handles the event fired from the game when a unit tooltip is shown.
+    Handles the event fired from the game when a  unit tooltip is shown.
 
     If the tooltip is consistent and represents a tooltip instance, this
     method notifies the library event system so subscribers can act upon it
@@ -2474,8 +2690,8 @@ self.tooltip = self:new('Tooltip')
 self.tooltip:registerTooltipHandlers()
 
 --[[--
-This model represents bags, bank bags, the player'self backpack, and any other
-container capable of holding items.
+This model represents bags, bank bags, the player's self backpack, and any
+other container capable of holding items.
 
 @classmod Models.Container
 ]]
@@ -2488,14 +2704,37 @@ local Container = {}
     Container constructor.
     ]]
     function Container.__construct()
-        return setmetatable({}, Container)
+        local instance = setmetatable({}, Container)
+
+        instance.outdated = true
+
+        return instance
+    end
+
+    --[[--
+    Marks the container as outdated, meaning that the container's items need
+    to be refreshed, mapped again, to reflect the current state of the player
+    items in the container.
+
+    It's important to mention that this flag is named "outdated" instead of
+    "updated" because as a layer above the game's API, the library will do the
+    best it can to keep the container's items updated, but it's not guaranteed
+    considering the fact that it can miss some specific events. One thing it
+    can be sure is when the container is outdated when the BAG_UPDATE event
+    is triggered.
+
+    @treturn Models.Container self
+    ]]
+    function Container:flagOutdated()
+        self.outdated = true
+        return self
     end
 
     --[[--
     Gets the item information for a specific slot in the container using the
     game's C_Container.GetContainerItemInfo API method.
 
-    @internal
+    @local
 
     @tparam int slot The internal container slot to get the item information from
 
@@ -2517,7 +2756,7 @@ local Container = {}
     @treturn table[Models.Item] the container's items
     ]]
     function Container:getItems()
-        if self.items == nil then
+        if self.items == nil or self.outdated then
             self:mapItems()
         end
 
@@ -2566,6 +2805,8 @@ local Container = {}
             local item = self.__.itemFactory:createFromContainerItemInfo(itemInformation)
             table.insert(self.items, item)
         end
+
+        self.outdated = false
 
         return self
     end
@@ -2669,7 +2910,39 @@ local Inventory = {}
     Inventory constructor.
     ]]
     function Inventory.__construct()
-        return setmetatable({}, Inventory)
+        local instance = setmetatable({}, Inventory)
+
+        instance.containers = {}
+        instance.outdated = true
+
+        return instance
+    end
+
+    --[[--
+    Marks the inventory as outdated, meaning that the container's items need
+    to be refreshed, mapped again, in which container inside this inventory
+    instance to reflect the current state of the player items in all
+    containers.
+
+    It's important to mention that this flag is named "outdated" instead of
+    "updated" because as a layer above the game's API, the library will do the
+    best it can to keep the container's items updated, but it's not guaranteed
+    considering the fact that it can miss some specific events. One thing it
+    can be sure is when the container is outdated when the BAG_UPDATE event
+    is triggered.
+
+    @see Models.Container.flagOutdated
+
+    @treturn Models.Inventory self
+    ]]
+    function Inventory:flagOutdated()
+        self.outdated = true
+
+        self.__.arr:each(self.containers, function (container)
+            container:flagOutdated()
+        end)
+
+        return self
     end
 
     --[[--
@@ -2682,6 +2955,8 @@ local Inventory = {}
     inventory mapping (refresh), to get the most updated items.
     ]]
     function Inventory:getItems()
+        self:maybeMapContainers()
+
         local items = {}
 
         self.__.arr:each(self.containers, function (container)
@@ -2699,6 +2974,8 @@ local Inventory = {}
     @treturn boolean
     ]]
     function Inventory:hasItem(item)
+        self:maybeMapContainers()
+
         return self.__.arr:any(self.containers, function (container)
             return container:hasItem(item)
         end)
@@ -2728,6 +3005,23 @@ local Inventory = {}
             table.insert(self.containers, container)
         end)
 
+        self.outdated = false
+
+        return self
+    end
+
+    --[[--
+    May map the containers if the inventory is outdated.
+
+    @local
+    
+    @treturn Models.Inventory self
+    ]]
+    function Inventory:maybeMapContainers()
+        if self.outdated then
+            self:mapContainers()
+        end
+
         return self
     end
 
@@ -2737,6 +3031,8 @@ local Inventory = {}
     @treturn Models.Inventory self
     ]]
     function Inventory:refresh()
+        self:maybeMapContainers()
+
         self.__.arr:each(self.containers, function (container)
             container:refresh()
         end)
@@ -2747,10 +3043,9 @@ local Inventory = {}
 
 if self.addon.inventory.track then
     self.playerInventory = self:new('Inventory')
-    self.playerInventory:mapContainers()
 
     self.events:listenOriginal('BAG_UPDATE', function ()
-        self.playerInventory:mapContainers()
+        self.playerInventory:flagOutdated()
     end)
 end
 
@@ -3014,6 +3309,7 @@ local Player = {}
     function Player.getCurrentPlayer()
         return Player.__construct()
             :setGuid(UnitGUID('player'))
+            :setInCombat(UnitAffectingCombat('player'))
             :setLevel(UnitLevel('player'))
             :setName(UnitName('player'))
             :setRealm(self:getClass('Realm'):getCurrentRealm())
@@ -3030,6 +3326,18 @@ local Player = {}
     ]]
     function Player:setGuid(value)
         self.guid = value
+        return self
+    end
+
+    --[[--
+    Sets the Player in combat status.
+
+    @tparam boolean value the Player's in combat status
+
+    @treturn Models.Player self
+    ]]
+    function Player:setInCombat(value)
+        self.inCombat = value
         return self
     end
 
@@ -3082,6 +3390,18 @@ local Player = {}
 -- stores the current player information for easy access
 self.currentPlayer = Player.getCurrentPlayer()
 
+
+--[[--
+Constants for centralizing values that are widely used in view classes.
+
+@table viewConstants
+
+@field DEFAULT_BACKGROUND_TEXTURE The default background texture for windows
+                                  and frames in general
+]]
+self.viewConstants = self.arr:freeze({
+    DEFAULT_BACKGROUND_TEXTURE = 'Interface/Tooltips/UI-Tooltip-Background',
+})
 
 --[[--
 The Window class is the base class for all windows in the library.
@@ -3234,7 +3554,7 @@ local Window = {}
         frame:SetPoint('BOTTOMRIGHT', self.window, 'BOTTOMRIGHT', 0, 0)
         frame:SetHeight(35)
         frame:SetBackdrop({
-            bgFile = 'Interface/Tooltips/UI-Tooltip-Background',
+            bgFile = self.__.viewConstants.DEFAULT_BACKGROUND_TEXTURE,
             edgeFile = '',
             edgeSize = 4,
             insets = {left = 4, right = 4, top = 4, bottom = 4},
@@ -3261,7 +3581,7 @@ local Window = {}
         local frame = CreateFrame('Frame', nil, UIParent, 'BackdropTemplate')
 
         frame:SetBackdrop({
-            bgFile = 'Interface/Tooltips/UI-Tooltip-Background',
+            bgFile = self.__.viewConstants.DEFAULT_BACKGROUND_TEXTURE,
             edgeFile = '',
             edgeSize = 4,
             insets = {left = 4, right = 4, top = 4, bottom = 4},
@@ -3353,7 +3673,7 @@ local Window = {}
         frame:SetPoint('TOPRIGHT', self.window, 'TOPRIGHT', 0, 0)
         frame:SetHeight(35)
         frame:SetBackdrop({
-            bgFile = 'Interface/Tooltips/UI-Tooltip-Background',
+            bgFile = self.__.viewConstants.DEFAULT_BACKGROUND_TEXTURE,
             edgeFile = '',
             edgeSize = 4,
             insets = {left = 4, right = 4, top = 4, bottom = 4},
