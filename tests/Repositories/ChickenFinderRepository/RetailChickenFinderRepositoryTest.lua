@@ -14,6 +14,32 @@ TestRetailChickenFinderRepository = BaseTestClass:new()
         lu.assertEquals(84, instance.westfallChickenSpeciesId)
     end
 
+    -- @covers RetailChickenFinderRepository:isChickenSummoned()
+    function TestRetailChickenFinderRepository:testIsChickenSummoned()
+        local function execution(summonedSpeciesId, expectedResult)
+            local instance = self:instance()
+
+            instance.petJournal = {
+                getSummonedPetSpeciesId = function (self)
+                    return summonedSpeciesId
+                end
+            }
+
+            local result = instance:isChickenSummoned()
+
+            lu.assertEquals(expectedResult, result)
+        end
+
+        -- no pet summoned
+        execution(nil, false)
+
+        -- not the Westfall chicken
+        execution(1, false)
+
+        -- the Westfall chicken
+        execution(84, true)
+    end
+
     -- @covers RetailChickenFinderRepository:playerHasChicken()
     function TestRetailChickenFinderRepository:testPlayerHasChicken()
         local instance = self:instance()

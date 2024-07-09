@@ -24,6 +24,13 @@ RetailChickenFinderRepository.__index = RetailChickenFinderRepository
     --[[
     @inheritDoc
     ]]
+    function RetailChickenFinderRepository:isChickenSummoned()
+        return self.petJournal:getSummonedPetSpeciesId() == self.westfallChickenSpeciesId
+    end
+
+    --[[
+    @inheritDoc
+    ]]
     function RetailChickenFinderRepository:playerHasChicken()
         return self.petJournal:playerOwnsPet(self.westfallChickenSpeciesId)
     end
