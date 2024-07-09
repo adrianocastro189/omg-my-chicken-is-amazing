@@ -35,7 +35,7 @@ local Interactions = {}
             return
         end
 
-        if not repository:playerChickenIsSummoned() then
+        if not repository:isChickenSummoned() then
             self:lamentChickenAbsence()
             return
         end

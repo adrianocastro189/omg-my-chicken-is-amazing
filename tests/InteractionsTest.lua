@@ -18,7 +18,7 @@ TestInteractions = BaseTestClass:new()
         local function execution(playerHasChicken, playerChickenIsSummoned, expectedMethod)
             AmazingChicken.chickenFinderRepository = {
                 playerHasChicken = function (self) return playerHasChicken end,
-                playerChickenIsSummoned = function (self) return playerChickenIsSummoned end
+                isChickenSummoned = function (self) return playerChickenIsSummoned end
             }
 
             local instance = AmazingChicken:new('Omg/Interactions')
