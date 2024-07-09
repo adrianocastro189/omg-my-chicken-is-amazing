@@ -13,7 +13,12 @@ RetailChickenFinderRepository.__index = RetailChickenFinderRepository
     RetailChickenFinderRepository constructor.
     ]]
     function RetailChickenFinderRepository.__construct()
-        return setmetatable({}, RetailChickenFinderRepository)
+        local instance = setmetatable({}, RetailChickenFinderRepository)
+
+        instance.petJournal = AmazingChicken:new('PetJournal')
+        instance.westfallChickenSpeciesId = 84
+
+        return instance
     end
 
     --[[

@@ -10,6 +10,8 @@ TestRetailChickenFinderRepository = BaseTestClass:new()
         local instance = self:instance()
 
         lu.assertNotNil(instance)
+        lu.assertIsTable(instance.petJournal)
+        lu.assertEquals(84, instance.westfallChickenSpeciesId)
     end
 
     -- @covers RetailChickenFinderRepository:playerHasChicken()
