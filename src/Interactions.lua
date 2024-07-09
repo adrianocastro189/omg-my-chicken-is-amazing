@@ -50,7 +50,19 @@ local Interactions = {}
     May lament something about the player's Westfall chicken.
     ]]
     function Interactions:maybeLament()
-        -- @TODO: Implement this method in CA6 <2024.07.09>
+        if self:randomNumber() <= 0.1 then
+            self:lament()
+        end
+    end
+
+    --[[
+    Generates a random number, encapsulated here in a method to easy on
+    mocking the results.
+
+    @treturn number
+    ]]
+    function Interactions:randomNumber()
+        return math.random()
     end
 
     --[[
