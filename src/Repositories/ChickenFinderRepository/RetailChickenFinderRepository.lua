@@ -3,10 +3,10 @@ The AbstractChickenFinderRepository implementation for the Retail client.
 ]]
 local RetailChickenFinderRepository = {}
 RetailChickenFinderRepository.__index = RetailChickenFinderRepository
-    AmazingChicken.__:addChildClass('Omg/ChickenFinderRepository', RetailChickenFinderRepository, 'Omg/AbstractChickenFinderRepository', {
+    AmazingChicken:addChildClass('Omg/ChickenFinderRepository', RetailChickenFinderRepository, 'Omg/AbstractChickenFinderRepository', {
         -- the classic client here refers to the Cataclysm client, not Classic Era
-        AmazingChicken.__.environment.constants.CLIENT_CLASSIC,
-        AmazingChicken.__.environment.constants.CLIENT_RETAIL,
+        AmazingChicken.environment.constants.CLIENT_CLASSIC,
+        AmazingChicken.environment.constants.CLIENT_RETAIL,
     })
 
     --[[

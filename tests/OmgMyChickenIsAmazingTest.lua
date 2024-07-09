@@ -18,7 +18,7 @@ TestOmgMyChickenIsAmazing = BaseTestClass:new()
 
             AmazingChicken:showWelcomeMessage()
 
-            lu.assertIsTrue(AmazingChicken.__.output:printed(expectedOutputMessage))
+            lu.assertIsTrue(AmazingChicken.output:printed(expectedOutputMessage))
         end
 
         execution(true, 'Yay! My chicken is in my inventory and can be summoned at any time!')

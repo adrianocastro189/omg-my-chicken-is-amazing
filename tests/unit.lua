@@ -33,10 +33,10 @@ BaseTestClass = {
         dofile('./src/Repositories/ChickenFinderRepository/RetailChickenFinderRepository.lua')
 
         -- initializes the addon
-        AmazingChicken.__.output:setTestingMode()
-        AmazingChicken.__.events:handleOriginal(nil, 'PLAYER_LOGIN')
+        AmazingChicken.output:setTestingMode()
+        AmazingChicken.events:handleOriginal(nil, 'PLAYER_LOGIN')
 
-        function dd(...) AmazingChicken.__:dd(...) end
+        function dd(...) AmazingChicken:dd(...) end
     end,
 
     -- guarantees that every test class inherits from this class by forcing
