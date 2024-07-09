@@ -59,4 +59,9 @@ TestInteractions = BaseTestClass:new()
         -- lament lack of chicken
         execution('lamentLackOfChicken', 'Oh, I wish I had a Westfall chicken...')
     end
+
+    -- @covers Interactions:maybeLament()
+    function TestInteractions:testMaybeLament()
+        -- @TODO: Implement this method in CA6 <2024.07.09>
+    end
 -- end of TestInteractions

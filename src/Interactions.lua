@@ -45,4 +45,11 @@ local Interactions = {}
     function Interactions:lamentLackOfChicken()
         AmazingChicken.output:say('Oh, I wish I had a Westfall chicken...')
     end
+
+    --[[
+    May lament something about the player's Westfall chicken.
+    ]]
+    function Interactions:maybeLament()
+        -- @TODO: Implement this method in CA6 <2024.07.09>
+    end
 -- end of Interactions
