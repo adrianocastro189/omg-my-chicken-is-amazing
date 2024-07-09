@@ -16,6 +16,23 @@ local Interactions = {}
     end
 
     --[[
+    Laments something about the player's Westfall chicken.
+    ]]
+    function Interactions:lament()
+        local repository = AmazingChicken.chickenFinderRepository
+        
+        if not repository:playerHasChicken() then
+            self:lamentLackOfChicken()
+            return
+        end
+
+        if not repository:playerChickenIsSummoned() then
+            self:lamentChickenAbsence()
+            return
+        end
+    end
+
+    --[[
     Laments the fact that the player's Westfall chicken is not summoned.
     ]]
     function Interactions:lamentChickenAbsence()
