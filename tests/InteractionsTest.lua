@@ -62,7 +62,40 @@ TestInteractions = BaseTestClass:new()
 
     -- @covers Interactions:maybeLament()
     function TestInteractions:testMaybeLament()
-        -- @TODO: Implement this method in CA6 <2024.07.09>
+        local function execution(randomNumber, shouldLament)
+            local instance = AmazingChicken:new('Omg/Interactions')
+
+            instance.randomNumber = function (self) return randomNumber end
+            instance.lamentInvoked = false
+
+            instance.lament = function (self) instance.lamentInvoked = true end
+
+            instance:maybeLament()
+
+            lu.assertEquals(shouldLament, instance.lamentInvoked)
+        end
+
+        -- random number is zero
+        execution(0, true)
+
+        -- random number represents less than 10%
+        execution(0.09, true)
+
+        -- random number is slightly greater than 10%
+        execution(0.1000000000000001, false)
+
+        -- random number is exactly 10%
+        execution(0.1, true)
+
+        -- random number represents more than 10%
+        execution(0.11, false)
+    end
+
+    -- @covers Interactions:randomNumber()
+    function TestInteractions:testRandomNumber()
+        local instance = AmazingChicken:new('Omg/Interactions')
+
+        lu.assertNotNil(instance:randomNumber())
     end
 
     -- @covers Interactions:registerInterval()
