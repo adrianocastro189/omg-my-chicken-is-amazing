@@ -15,6 +15,11 @@ events:listen(events.EVENT_NAME_PLAYER_LOGIN, function ()
     -- initializes the chicken finder repository singleton
     AmazingChicken.chickenFinderRepository = AmazingChicken:new('Omg/ChickenFinderRepository')
 
+    -- initializes the interactions instance
+    AmazingChicken.interactions = AmazingChicken
+        :new('Omg/Interactions')
+        :registerInterval()
+
     --[[
     This method will output the given message to the chat frame.
 
