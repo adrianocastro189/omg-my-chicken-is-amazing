@@ -20,6 +20,15 @@ local AbstractChickenFinderRepository = {}
     end
 
     --[[
+    Determines whether the player has summoned the Westfall chicken or not.
+
+    @treturn boolean
+    ]]
+    function AbstractChickenFinderRepository:isChickenSummoned()
+        error('This is an abstract method and should be implemented by this class inheritances')
+    end
+
+    --[[
     Determines whether the player has the Westfall chicken or not.
 
     @treturn boolean
