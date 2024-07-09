@@ -52,4 +52,14 @@ local Interactions = {}
     function Interactions:maybeLament()
         -- @TODO: Implement this method in CA6 <2024.07.09>
     end
+
+    --[[
+    Registers an interval instance to periodically trigger interactions.
+
+    @treturn self
+    ]]
+    function Interactions:registerInterval()
+        -- @TODO: Implement this method in CA7 <2024.07.09>
+        return self
+    end
 -- end of Interactions

@@ -64,4 +64,12 @@ TestInteractions = BaseTestClass:new()
     function TestInteractions:testMaybeLament()
         -- @TODO: Implement this method in CA6 <2024.07.09>
     end
+
+    -- @covers Interactions:registerInterval()
+    function TestInteractions:testRegisterInterval()
+        -- @TODO: Implement this method in CA7 <2024.07.09>
+        local instance = AmazingChicken:new('Omg/Interactions')
+
+        lu.assertEquals(instance:registerInterval(), instance)
+    end
 -- end of TestInteractions
