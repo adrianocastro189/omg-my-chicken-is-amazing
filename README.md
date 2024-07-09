@@ -15,21 +15,48 @@ can [buy the author a coffee](https://github.com/sponsors/adrianocastro189).
 Every contribution or subscription is deeply appreciated and supports
 the project development.
 
+## How to use this addon
+
+This addon was designed with a bit of RP in mind, so it will make the player
+interact with the chicken in some ways and also with the world around it. 
+Expect some fun interactions in the future, but for now, once enabled, be 
+advised that your character will say a few things during your gameplay.
+
+But no worries, the addon will not spam your chat with messages nor will say
+anything that could be against the game's terms of service. It's just a fun
+way to remind you to summon your chicken.
+
+* Install and enable the addon
+* After that, no setup is required, and the addon will automatically detect 
+  whether the player has the Westfall Chicken in the pet journal
+* When the player doesn't have the Westfall Chicken in the pet journal,  
+  there's a **small chance** that the character will lament the fact the they 
+  don't have the chicken
+* When the chicken is not summoned, there's a **small chance** that the 
+  character will lament the absence of the chicken
+* When the chicken is summoned, the character will stay quiet and enjoy the
+  company of the chicken
+
 ## What's on the roadmap for the next versions
 
-* **Support to all client versions:** Cataclysm Classic and Retail
-* **Improve detection:** Improve ways to detect whether the chicken is in the 
-player's inventory, bank or in the pet journal
-* **Fun interactions:** Add some fun interactions with the chicken, to be 
+* **More fun interactions:** Add some fun interactions with the chicken, to be 
 clarified in the future
+
+## Limitations
+
+* **Classic Era support:** Unfortunately, I couldn't find any solutions to 
+detect whether the player has a summoned chicken in the Classic Era due to the
+limitations of the pet journal API. The addon will only work for Retail and
+Cataclysm Classic clients. Hope to find a solution in the future.
 
 ## Changelog
 
-### yyyy.mm.dd - version 0.0.3-alpha
+### 2024.07.09 - version 0.0.3-alpha
 
 * Add support for Cataclysm Classic and Retail clients
 * Add the first player interaction with the chicken
 * Identify whether the Westfall Chicken is summoned or not
+* Remove Classic Era support due to limitations in the pet journal API
 * Update Stormwind Library to version 1.8.0
 
 ### 2024.06.28 - version 0.0.2-alpha
