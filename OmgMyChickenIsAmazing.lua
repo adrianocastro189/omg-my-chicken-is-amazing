@@ -29,27 +29,5 @@ events:listen(events.EVENT_NAME_PLAYER_LOGIN, function ()
     ]]
     function AmazingChicken:out(message)
         AmazingChicken.output:out(message)
-      end
-
-    --[[
-    Shows a welcome message to the player when logging in.
-
-    This method will probably be replaced later by a more complex iteration
-    class that will have more logic and paths. For now, it is just a simple
-    method to serve as a proof of concept.
-    ]]
-    function AmazingChicken:showWelcomeMessage()
-        if self.chickenFinderRepository:playerHasChicken() then
-            AmazingChicken:out('Yay! My chicken is in my inventory and can be summoned at any time!')
-            return
-        end
-        
-        AmazingChicken:out('Aww =( my chicken is not in my bags...')
-    end
-
-    if AmazingChicken.environment:inGame() then
-        -- we want this call to be made only when the player is in the game
-        -- so tests won't be affected by it
-        AmazingChicken:showWelcomeMessage()
     end
 end)
