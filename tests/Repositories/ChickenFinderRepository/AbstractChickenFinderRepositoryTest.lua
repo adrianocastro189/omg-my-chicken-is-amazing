@@ -5,7 +5,17 @@ TestAbstractChickenFinderRepository = BaseTestClass:new()
 
         lu.assertNotNil(instance)
 
-        -- abstract method
-        lu.assertError(function() instance:playerHasChicken() end)
+        -- abstract methods
+        local abstractMethods = {
+            'isChickenSummoned',
+            'playerHasChicken',
+        }
+
+        for _, methodName in ipairs(abstractMethods) do
+            lu.assertErrorMsgContentEquals(
+                'This is an abstract method and should be implemented by this class inheritances',
+                function() instance[methodName]() end
+            )
+        end
     end
 -- end of TestAbstractChickenFinderRepository
