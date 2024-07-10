@@ -3,26 +3,35 @@ The AbstractChickenFinderRepository implementation for the Retail client.
 ]]
 local RetailChickenFinderRepository = {}
 RetailChickenFinderRepository.__index = RetailChickenFinderRepository
-    AmazingChicken.__:addChildClass('Omg/ChickenFinderRepository', RetailChickenFinderRepository, 'Omg/AbstractChickenFinderRepository', {
+    AmazingChicken:addChildClass('Omg/ChickenFinderRepository', RetailChickenFinderRepository, 'Omg/AbstractChickenFinderRepository', {
         -- the classic client here refers to the Cataclysm client, not Classic Era
-        AmazingChicken.__.environment.constants.CLIENT_CLASSIC,
-        AmazingChicken.__.environment.constants.CLIENT_RETAIL,
+        AmazingChicken.environment.constants.CLIENT_CLASSIC,
+        AmazingChicken.environment.constants.CLIENT_RETAIL,
     })
 
     --[[
     RetailChickenFinderRepository constructor.
     ]]
     function RetailChickenFinderRepository.__construct()
-        return setmetatable({}, RetailChickenFinderRepository)
+        local instance = setmetatable({}, RetailChickenFinderRepository)
+
+        instance.petJournal = AmazingChicken:new('PetJournal')
+        instance.westfallChickenSpeciesId = 84
+
+        return instance
     end
 
     --[[
     @inheritDoc
-    @codeCoverageIgnore
+    ]]
+    function RetailChickenFinderRepository:isChickenSummoned()
+        return self.petJournal:getSummonedPetSpeciesId() == self.westfallChickenSpeciesId
+    end
 
-    @TODO: To be implemented in the future <2024.06.10>
+    --[[
+    @inheritDoc
     ]]
     function RetailChickenFinderRepository:playerHasChicken()
-        error('To be implemented in future versions')
+        return self.petJournal:playerOwnsPet(self.westfallChickenSpeciesId)
     end
 -- end of RetailChickenFinderRepository

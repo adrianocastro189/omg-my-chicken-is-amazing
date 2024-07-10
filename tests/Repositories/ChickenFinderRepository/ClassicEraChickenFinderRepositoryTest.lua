@@ -1,8 +1,8 @@
 TestClassicEraChickenFinderRepository = BaseTestClass:new()
     -- helper method to instantiate the classic implementation
     function TestClassicEraChickenFinderRepository:instance()
-        AmazingChicken.__.environment.getClientFlavor = function () return AmazingChicken.__.environment.constants.CLIENT_CLASSIC_ERA end
-        return AmazingChicken.__:new('Omg/ChickenFinderRepository')
+        AmazingChicken.environment.getClientFlavor = function () return AmazingChicken.environment.constants.CLIENT_CLASSIC_ERA end
+        return AmazingChicken:new('Omg/ChickenFinderRepository')
     end
 
     -- @covers ClassicEraChickenFinderRepository:__construct()
@@ -14,7 +14,7 @@ TestClassicEraChickenFinderRepository = BaseTestClass:new()
 
     -- @covers ClassicEraChickenFinderRepository:playerHasChicken()
     function TestClassicEraChickenFinderRepository:testPlayerHasChicken()
-        AmazingChicken.__.playerInventory = {
+        AmazingChicken.playerInventory = {
             hasItem = function(self, itemId)
                 return itemId == 11110
             end

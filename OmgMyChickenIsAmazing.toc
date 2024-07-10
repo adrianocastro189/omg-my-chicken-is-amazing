@@ -1,14 +1,16 @@
 ## Author: Adriano Castro
-## Interface: 11502
+## Interface: 100207
 ## Name: OMG! My Chicken is amazing!
 ## Notes: A very simple addon to always remind players to summon their Westfall chicken.
-## Title: OMG! My Chicken is amazing! |cffffee770.0.2-alpha|r
-## Version: 0.0.2-alpha
+## Title: OMG! My Chicken is amazing! |cffffee770.0.3-alpha|r
+## Version: 0.0.3-alpha
 ## X-Curse-Project-ID: 1034980
 
 lib\stormwind-library.lua
 
 OmgMyChickenIsAmazing.lua
+
+src\Interactions.lua
 
 src\Repositories\ChickenFinderRepository\AbstractChickenFinderRepository.lua
 src\Repositories\ChickenFinderRepository\ClassicEraChickenFinderRepository.lua
