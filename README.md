@@ -44,19 +44,19 @@ clarified in the future
 
 ## Limitations
 
-* **Classic Era support:** Unfortunately, I couldn't find any solutions to 
-detect whether the player has a summoned chicken in the Classic Era due to the
-limitations of the pet journal API. The addon will only work for Retail and
-Cataclysm Classic clients. Hope to find a solution in the future.
+* **Classic support:** Unfortunately, I couldn't find any solutions to 
+detect whether the player has a summoned chicken in the Classic clients due to 
+the limitations of the Pet Journal API. The addon will only work on Retail 
+only for now. Hope to find a solution in the future.
 
 ## Changelog
 
-### yyyy.mm.dd - version 0.0.3-alpha
+### 2024.07.10 - version 0.0.3-alpha
 
-* Add support for Cataclysm Classic and Retail clients
+* Add support for Retail
 * Add the first player interaction with the chicken
 * Identify whether the Westfall Chicken is summoned or not
-* Remove Classic Era support due to limitations in the pet journal API
+* Remove Classic support due to limitations in the pet journal API
 * Update Stormwind Library to version 1.8.0
 
 ### 2024.06.28 - version 0.0.2-alpha
