@@ -54,7 +54,7 @@ only for now. Hope to find a solution in the future.
 ### 2024.07.10 - version 0.0.3-alpha
 
 * Add support for Retail
-* Add the first player interaction with the chicken
+* Add the first player interactions with the chicken
 * Identify whether the Westfall Chicken is summoned or not
 * Remove Classic support due to limitations in the pet journal API
 * Update Stormwind Library to version 1.8.0
