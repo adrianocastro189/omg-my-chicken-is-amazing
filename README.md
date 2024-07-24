@@ -51,6 +51,10 @@ only for now. Hope to find a solution in the future.
 
 ## Changelog
 
+### 2024.07.24 - version 0.0.4-alpha
+
+* Update TOC interface number for Retail
+
 ### 2024.07.10 - version 0.0.3-alpha
 
 * Add support for Retail
