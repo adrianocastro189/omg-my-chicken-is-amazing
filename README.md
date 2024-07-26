@@ -53,6 +53,7 @@ only for now. Hope to find a solution in the future.
 
 ### yyyy.mm.dd - version 1.0.0
 
+* Fix a typo when lamenting the chicken absence
 * Update Stormwind Library to version 1.10.0
 
 ### 2024.07.24 - version 0.0.4-alpha

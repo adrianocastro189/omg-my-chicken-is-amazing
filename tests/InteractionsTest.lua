@@ -61,7 +61,7 @@ TestInteractions = BaseTestClass:new()
         end
 
         -- lament chicken absence
-        execution('lamentChickenAbsence', 'Oh, I wish my Westfall chicken was here with me...')
+        execution('lamentChickenAbsence', 'Oh, I wish my Westfall chicken were here with me...')
 
         -- lament lack of chicken
         execution('lamentLackOfChicken', 'Oh, I wish I had a Westfall chicken...')
