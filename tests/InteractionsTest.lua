@@ -67,8 +67,8 @@ TestInteractions = BaseTestClass:new()
         execution('lamentLackOfChicken', 'Oh, I wish I had a Westfall chicken...')
     end
 
-    -- @covers Interactions:maybeLament()
-    function TestInteractions:testMaybeLament()
+    -- @covers Interactions:randomlyLament()
+    function TestInteractions:testRandomlyLament()
         local function execution(randomNumber, shouldLament)
             local instance = AmazingChicken:new('Omg/Interactions')
 
@@ -77,7 +77,7 @@ TestInteractions = BaseTestClass:new()
 
             instance.lament = function (self) instance.lamentInvoked = true end
 
-            instance:maybeLament()
+            instance:randomlyLament()
 
             lu.assertEquals(shouldLament, instance.lamentInvoked)
         end

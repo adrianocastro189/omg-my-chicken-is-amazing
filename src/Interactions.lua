@@ -58,7 +58,7 @@ local Interactions = {}
     --[[
     May lament something about the player's Westfall chicken.
     ]]
-    function Interactions:maybeLament()
+    function Interactions:randomlyLament()
         if self:randomNumber() <= 0.1 then
             self:lament()
         end
@@ -81,7 +81,7 @@ local Interactions = {}
     ]]
     function Interactions:registerInterval()
         self:createInterval()
-            :setCallback(function () self:maybeLament() end)
+            :setCallback(function () self:randomlyLament() end)
             :setSeconds(60)
             :start()
         
