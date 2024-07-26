@@ -52,6 +52,31 @@ TestInteractions = BaseTestClass:new()
         execution('lamentLackOfChicken', 'Oh, I wish I had a Westfall chicken...')
     end
 
+    -- @covers Interactions:maybeExclaim()
+    function TestInteractions:testMaybeExclaim()
+        local function execution(playerChickenIsSummoned, shouldExclaim)
+            AmazingChicken.chickenFinderRepository = {
+                isChickenSummoned = function (self) return playerChickenIsSummoned end
+            }
+
+            local instance = AmazingChicken:new('Omg/Interactions')
+
+            instance.exclaimInvoked = false
+
+            instance.exclaim = function (self) instance.exclaimInvoked = true end
+
+            instance:maybeExclaim()
+
+            lu.assertEquals(instance.exclaimInvoked, shouldExclaim)
+        end
+
+        -- chicken is summoned
+        execution(true, true)
+
+        -- chicken is not summoned
+        execution(false, false)
+    end
+
     -- @covers Interactions:maybeLament()
     function TestInteractions:testMaybeLament()
         local function execution(playerHasChicken, playerChickenIsSummoned, expectedMethod)

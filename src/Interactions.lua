@@ -46,6 +46,15 @@ local Interactions = {}
     end
 
     --[[
+    May exclaim if the player's Westfall chicken is summoned.
+    ]]
+    function Interactions:maybeExclaim()
+        if AmazingChicken.chickenFinderRepository:isChickenSummoned() then
+            self:exclaim()
+        end
+    end
+
+    --[[
     May lament something about the player's Westfall chicken if the player
     doesn't have one or if it's not summoned.
     ]]
