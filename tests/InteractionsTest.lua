@@ -13,34 +13,19 @@ TestInteractions = BaseTestClass:new()
         lu.assertNotIsNil(instance:createInterval())
     end
 
-    -- @covers Interactions:lament()
-    function TestInteractions:testLament()
-        local function execution(playerHasChicken, playerChickenIsSummoned, expectedMethod)
-            AmazingChicken.chickenFinderRepository = {
-                playerHasChicken = function (self) return playerHasChicken end,
-                isChickenSummoned = function (self) return playerChickenIsSummoned end
-            }
+    -- @covers Interactions:exclaim()
+    function TestInteractions:testExclaim()
+        local instance = AmazingChicken:new('Omg/Interactions')
 
-            local instance = AmazingChicken:new('Omg/Interactions')
+        AmazingChicken.output = {
+            yell = function (self, message)
+                AmazingChicken.messageArg = message
+            end
+        }
 
-            instance.methodCalled = nil
+        instance:exclaim()
 
-            instance.lamentLackOfChicken = function (self) instance.methodCalled = 'lamentLackOfChicken' end
-            instance.lamentChickenAbsence = function (self) instance.methodCalled = 'lamentChickenAbsence' end
-
-            instance:lament()
-
-            lu.assertEquals(instance.methodCalled, expectedMethod)
-        end
-
-        -- player has chicken, chicken is summoned
-        execution(true, true, nil)
-
-        -- player has chicken, chicken is not summoned
-        execution(true, false, 'lamentChickenAbsence')
-
-        -- player doesn't have chicken
-        execution(false, false, 'lamentLackOfChicken')
+        lu.assertEquals(AmazingChicken.messageArg, 'OMG! My Chicken is amazing!')
     end
 
     -- @covers Interactions:lamentChickenAbsence()
@@ -61,25 +46,111 @@ TestInteractions = BaseTestClass:new()
         end
 
         -- lament chicken absence
-        execution('lamentChickenAbsence', 'Oh, I wish my Westfall chicken was here with me...')
+        execution('lamentChickenAbsence', 'Oh, I wish my Westfall chicken were here with me...')
 
         -- lament lack of chicken
         execution('lamentLackOfChicken', 'Oh, I wish I had a Westfall chicken...')
     end
 
+    -- @covers Interactions:maybeExclaim()
+    function TestInteractions:testMaybeExclaim()
+        local function execution(playerChickenIsSummoned, shouldExclaim)
+            AmazingChicken.chickenFinderRepository = {
+                isChickenSummoned = function (self) return playerChickenIsSummoned end
+            }
+
+            local instance = AmazingChicken:new('Omg/Interactions')
+
+            instance.exclaimInvoked = false
+
+            instance.exclaim = function (self) instance.exclaimInvoked = true end
+
+            instance:maybeExclaim()
+
+            lu.assertEquals(instance.exclaimInvoked, shouldExclaim)
+        end
+
+        -- chicken is summoned
+        execution(true, true)
+
+        -- chicken is not summoned
+        execution(false, false)
+    end
+
     -- @covers Interactions:maybeLament()
     function TestInteractions:testMaybeLament()
+        local function execution(playerHasChicken, playerChickenIsSummoned, expectedMethod)
+            AmazingChicken.chickenFinderRepository = {
+                playerHasChicken = function (self) return playerHasChicken end,
+                isChickenSummoned = function (self) return playerChickenIsSummoned end
+            }
+
+            local instance = AmazingChicken:new('Omg/Interactions')
+
+            instance.methodCalled = nil
+
+            instance.lamentLackOfChicken = function (self) instance.methodCalled = 'lamentLackOfChicken' end
+            instance.lamentChickenAbsence = function (self) instance.methodCalled = 'lamentChickenAbsence' end
+
+            instance:maybeLament()
+
+            lu.assertEquals(instance.methodCalled, expectedMethod)
+        end
+
+        -- player has chicken, chicken is summoned
+        execution(true, true, nil)
+
+        -- player has chicken, chicken is not summoned
+        execution(true, false, 'lamentChickenAbsence')
+
+        -- player doesn't have chicken
+        execution(false, false, 'lamentLackOfChicken')
+    end
+
+    -- @covers Interactions:randomlyExclaim()
+    function TestInteractions:testRandomlyExclaim()
+        local function execution(randomNumber, shouldExclaim)
+            local instance = AmazingChicken:new('Omg/Interactions')
+
+            instance.randomNumber = function (self) return randomNumber end
+            instance.maybeExclaimInvoked = false
+
+            instance.maybeExclaim = function (self) instance.maybeExclaimInvoked = true end
+
+            instance:randomlyExclaim()
+
+            lu.assertEquals(shouldExclaim, instance.maybeExclaimInvoked)
+        end
+
+        -- random number is zero
+        execution(0, true)
+
+        -- random number represents less than 2.5%
+        execution(0.024, true)
+
+        -- random number is slightly greater than 2.5%
+        execution(0.0250000000000001, false)
+
+        -- random number is exactly 2.5%
+        execution(0.025, true)
+
+        -- random number represents more than 10%
+        execution(0.026, false)
+    end
+
+    -- @covers Interactions:randomlyLament()
+    function TestInteractions:testRandomlyLament()
         local function execution(randomNumber, shouldLament)
             local instance = AmazingChicken:new('Omg/Interactions')
 
             instance.randomNumber = function (self) return randomNumber end
-            instance.lamentInvoked = false
+            instance.maybeLamentInvoked = false
 
-            instance.lament = function (self) instance.lamentInvoked = true end
+            instance.maybeLament = function (self) instance.maybeLamentInvoked = true end
 
-            instance:maybeLament()
+            instance:randomlyLament()
 
-            lu.assertEquals(shouldLament, instance.lamentInvoked)
+            lu.assertEquals(shouldLament, instance.maybeLamentInvoked)
         end
 
         -- random number is zero

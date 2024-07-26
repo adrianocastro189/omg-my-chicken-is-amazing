@@ -25,9 +25,40 @@ local Interactions = {}
     end
 
     --[[
-    Laments something about the player's Westfall chicken.
+    Express the player's amazement with the Westfall chicken.
     ]]
-    function Interactions:lament()
+    function Interactions:exclaim()
+        AmazingChicken.output:yell('OMG! My Chicken is amazing!')
+    end
+
+    --[[
+    Laments the fact that the player's Westfall chicken is not summoned.
+    ]]
+    function Interactions:lamentChickenAbsence()
+        AmazingChicken.output:say('Oh, I wish my Westfall chicken were here with me...')
+    end
+
+    --[[
+    Laments the fact that the player doesn't have a Westfall chicken.
+    ]]
+    function Interactions:lamentLackOfChicken()
+        AmazingChicken.output:say('Oh, I wish I had a Westfall chicken...')
+    end
+
+    --[[
+    May exclaim if the player's Westfall chicken is summoned.
+    ]]
+    function Interactions:maybeExclaim()
+        if AmazingChicken.chickenFinderRepository:isChickenSummoned() then
+            self:exclaim()
+        end
+    end
+
+    --[[
+    May lament something about the player's Westfall chicken if the player
+    doesn't have one or if it's not summoned.
+    ]]
+    function Interactions:maybeLament()
         local repository = AmazingChicken.chickenFinderRepository
         
         if not repository:playerHasChicken() then
@@ -42,25 +73,20 @@ local Interactions = {}
     end
 
     --[[
-    Laments the fact that the player's Westfall chicken is not summoned.
+    May exclaim if a random number matches the % chance of exclaiming.
     ]]
-    function Interactions:lamentChickenAbsence()
-        AmazingChicken.output:say('Oh, I wish my Westfall chicken was here with me...')
+    function Interactions:randomlyExclaim()
+        if self:randomNumber() <= 0.025 then
+            self:maybeExclaim()
+        end
     end
 
     --[[
-    Laments the fact that the player doesn't have a Westfall chicken.
+    May lament if a random number matches the % chance of lamenting.
     ]]
-    function Interactions:lamentLackOfChicken()
-        AmazingChicken.output:say('Oh, I wish I had a Westfall chicken...')
-    end
-
-    --[[
-    May lament something about the player's Westfall chicken.
-    ]]
-    function Interactions:maybeLament()
+    function Interactions:randomlyLament()
         if self:randomNumber() <= 0.1 then
-            self:lament()
+            self:maybeLament()
         end
     end
 
@@ -81,7 +107,10 @@ local Interactions = {}
     ]]
     function Interactions:registerInterval()
         self:createInterval()
-            :setCallback(function () self:maybeLament() end)
+            :setCallback(function ()
+                self:randomlyLament()
+                self:randomlyExclaim()
+            end)
             :setSeconds(60)
             :start()
         

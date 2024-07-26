@@ -1,4 +1,4 @@
-AmazingChicken = StormwindLibrary_v1_8_0.new({
+AmazingChicken = StormwindLibrary_v1_10_0.new({
     colors = {
         primary = 'CC7E0E'
     },
