@@ -107,19 +107,50 @@ TestInteractions = BaseTestClass:new()
         execution(false, false, 'lamentLackOfChicken')
     end
 
+    -- @covers Interactions:randomlyExclaim()
+    function TestInteractions:testRandomlyExclaim()
+        local function execution(randomNumber, shouldExclaim)
+            local instance = AmazingChicken:new('Omg/Interactions')
+
+            instance.randomNumber = function (self) return randomNumber end
+            instance.maybeExclaimInvoked = false
+
+            instance.maybeExclaim = function (self) instance.maybeExclaimInvoked = true end
+
+            instance:randomlyExclaim()
+
+            lu.assertEquals(shouldExclaim, instance.maybeExclaimInvoked)
+        end
+
+        -- random number is zero
+        execution(0, true)
+
+        -- random number represents less than 2.5%
+        execution(0.024, true)
+
+        -- random number is slightly greater than 2.5%
+        execution(0.0250000000000001, false)
+
+        -- random number is exactly 2.5%
+        execution(0.025, true)
+
+        -- random number represents more than 10%
+        execution(0.026, false)
+    end
+
     -- @covers Interactions:randomlyLament()
     function TestInteractions:testRandomlyLament()
         local function execution(randomNumber, shouldLament)
             local instance = AmazingChicken:new('Omg/Interactions')
 
             instance.randomNumber = function (self) return randomNumber end
-            instance.lamentInvoked = false
+            instance.maybeLamentInvoked = false
 
-            instance.maybeLament = function (self) instance.lamentInvoked = true end
+            instance.maybeLament = function (self) instance.maybeLamentInvoked = true end
 
             instance:randomlyLament()
 
-            lu.assertEquals(shouldLament, instance.lamentInvoked)
+            lu.assertEquals(shouldLament, instance.maybeLamentInvoked)
         end
 
         -- random number is zero

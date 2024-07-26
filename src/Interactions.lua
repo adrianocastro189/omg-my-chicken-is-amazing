@@ -73,7 +73,16 @@ local Interactions = {}
     end
 
     --[[
-    May lament something about the player's Westfall chicken.
+    May exclaim if a random number matches the % chance of exclaiming.
+    ]]
+    function Interactions:randomlyExclaim()
+        if self:randomNumber() <= 0.025 then
+            self:maybeExclaim()
+        end
+    end
+
+    --[[
+    May lament if a random number matches the % chance of lamenting.
     ]]
     function Interactions:randomlyLament()
         if self:randomNumber() <= 0.1 then
