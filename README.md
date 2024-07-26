@@ -34,8 +34,8 @@ way to remind you to summon your chicken.
   don't have the chicken
 * When the chicken is not summoned, there's a **small chance** that the 
   character will lament the absence of the chicken
-* When the chicken is summoned, the character will stay quiet and enjoy the
-  company of the chicken
+* When the chicken is summoned, there's a **very small chance** that the 
+  character will **yell** how amazing the chicken is
 
 ## What's on the roadmap for the next versions
 

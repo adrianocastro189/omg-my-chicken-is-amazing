@@ -107,7 +107,10 @@ local Interactions = {}
     ]]
     function Interactions:registerInterval()
         self:createInterval()
-            :setCallback(function () self:randomlyLament() end)
+            :setCallback(function ()
+                self:randomlyLament()
+                self:randomlyExclaim()
+            end)
             :setSeconds(60)
             :start()
         
