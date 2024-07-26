@@ -1,14 +1,56 @@
 
 --- Stormwind Library
 -- @module stormwind-library
-if (StormwindLibrary_v1_8_0) then return end
+if (StormwindLibrary_v1_10_0) then return end
         
-StormwindLibrary_v1_8_0 = {}
-StormwindLibrary_v1_8_0.__index = StormwindLibrary_v1_8_0
+StormwindLibrary_v1_10_0 = {}
+StormwindLibrary_v1_10_0.__index = StormwindLibrary_v1_10_0
 
-function StormwindLibrary_v1_8_0.new(props)
-    local self = setmetatable({}, StormwindLibrary_v1_8_0)
-    -- Library version = '1.8.0'
+function StormwindLibrary_v1_10_0.new(props)
+    local self = setmetatable({}, StormwindLibrary_v1_10_0)
+    -- Library version = '1.10.0'
+
+-- list of callbacks to be invoked when the library is loaded
+self.loadCallbacks = {}
+
+--[[--
+Removes the callback loader and its properties.
+]]
+function self:destroyCallbackLoader()
+    self.destroyCallbackLoader = nil
+    self.invokeLoadCallbacks = nil
+    self.loadCallbacks = nil
+    self.onLoad = nil
+end
+
+--[[--
+Invokes all the callbacks that have been enqueued.
+]]
+function self:invokeLoadCallbacks()
+    self.arr:each(self.loadCallbacks, function(callback)
+        callback()
+    end)
+
+    self:destroyCallbackLoader()
+end
+
+--[[--
+Enqueues a callback function to be invoked when the library is loaded.
+
+@tparam function callback The callback function to be invoked when the library is loaded
+]]
+function self:onLoad(callback)
+    table.insert(self.loadCallbacks, callback)
+end
+
+-- invokes a local callback that won't be invoked in game
+-- for testing purposes only
+self:onLoad(function()
+    if not self.environment:inGame() then
+        self.callbacksInvoked = true
+    end
+end)
+
 
 --[[--
 Dumps the values of variables and tables in the output, then dies.
@@ -141,6 +183,29 @@ local Arr = {}
     end
 
     --[[--
+    Counts the number of items in a list.
+
+    This method solves the problem of counting the number of items in a list
+    that's not an array, so it can't be counted using the # operator.
+
+    @tparam table list The list to be counted
+
+    @treturn integer The number of items in the list
+
+    @usage
+        local list = {a = 'a', b = 'b', c = 'c'}
+        local count = library.arr:count(list)
+        -- count = 3
+    ]]
+    function Arr:count(list)
+        local count = 0
+        self:each(list, function()
+            count = count + 1
+        end)
+        return count
+    end
+
+    --[[--
     Iterates over the list values and calls the callback function in the
     second argument for each of them.
 
@@ -216,7 +281,7 @@ local Arr = {}
         local current = list
     
         for i = 1, #keys do
-            current = current and current[keys[i]]
+            current = self:safeGet(current, keys[i])
             if current == nil then
                 return default
             end
@@ -467,11 +532,48 @@ local Arr = {}
     end
 
     --[[--
+    Safe get is an internal method, not meant to be used by other classes
+    that will return a value from a list given a key that can be a string
+    or a number.
+
+    This method is a helper to allow dot notation keys to contain numbers,
+    which was a limitation of the get() method until version 1.10.0.
+
+    @internal
+
+    @tparam table list the table to have the value retrieved
+    @tparam string|number key the key to be used in the search
+
+    @treturn any|nil the value found in the list
+    ]]
+    function Arr:safeGet(list, key)
+        if list == nil then
+            return nil
+        end
+
+        local value = list[key]
+
+        if value ~= nil then
+            return value
+        end
+
+        return list[tonumber(key)]
+    end
+
+    --[[--
     Sets a value using arrays dot notation.
 
     It will basically iterate over the keys separated by "." and create
     the missing indexes, finally setting the last key with the value in
     the args list.
+
+    @NOTE: Although dot notation keys are supported and when retrieving
+           values they can contain numbers or strings, when setting values with
+           numbers as keys, nested or not, they will be converted to strings.
+           That's a convention to avoid questions about the type of the keys,
+           considering that when retrieving, the library can check both types
+           and return the value, but when setting, it's not possible to
+           imagine what's the intention of the developer.
 
     @tparam table list the table to have the value set
     @tparam string key the key to be set
@@ -1379,8 +1481,6 @@ variable property in the TOC file passed to the library constructor.
 @treturn bool True if the configuration is enabled, false otherwise
 --]]
 function self:isConfigEnabled()
-    -- @TODO: Remove this method once the library offers a structure to
-    --        execute callbacks when it's loaded <2024.04.22>
     self:maybeInitializeConfiguration()
 
     return self.configuration ~= nil
@@ -1388,9 +1488,6 @@ end
 
 --[[
 May initialize the addon configuration if it's not set yet.
-
-@TODO: Remove this method once the library offers a structure to execute
-       callbacks when it's loaded <2024.04.22>
 ]]
 function self:maybeInitializeConfiguration()
     local key = self.addon.data
@@ -1580,6 +1677,17 @@ local Output = {}
     function Output:setTestingMode()
         self.history = {}
         self.mode = 'test'
+    end
+
+    --[[--
+    Yells which is equal to use /y in the game.
+
+    In other words, when called, this method will make the character yell!
+
+    @tparam string message The message to be yelled
+    ]]
+    function Output:yell(message)
+        SendChatMessage(message, 'YELL')
     end
 -- end of Output
 
@@ -2562,6 +2670,11 @@ local AbstractTooltip = {}
     end
 -- end of AbstractTooltip
 
+self:onLoad(function()
+    self.tooltip = self:new('Tooltip')
+    self.tooltip:registerTooltipHandlers()
+end)
+
 --[[--
 The default implementation of the AbstractTooltip class for the Classic
 clients.
@@ -2687,10 +2800,6 @@ local ItemFactory = {}
 
 self.itemFactory = ItemFactory.__construct()
 
-
--- @TODO: Move this to AbstractTooltip.lua once the library initialization callbacks are implemented <2024.05.04>
-self.tooltip = self:new('Tooltip')
-self.tooltip:registerTooltipHandlers()
 
 --[[--
 This model represents bags, bank bags, the player's self backpack, and any
@@ -3449,7 +3558,26 @@ local Window = {}
         self.firstVisibility = true
         self.id = id
 
-        self.contentChildren = {}
+        self.pages = {}
+
+        return self
+    end
+
+    --[[--
+    Adds a page to the window.
+
+    @tparam Views.Windows.WindowPage windowPage The window page to be added
+
+    @treturn Views.Windows.Window The window instance, for method chaining
+    ]]
+    function Window:addPage(windowPage)
+        self.pages[windowPage.pageId] = windowPage
+        windowPage:hide()
+        self:positionPages()
+
+        if self.__.arr:count(self.pages) == 1 then
+            self:setActivePage(windowPage.pageId)
+        end
 
         return self
     end
@@ -3488,7 +3616,7 @@ local Window = {}
         self:createScrollbar()
         self:createContentFrame()
 
-        self:positionContentChildFrames()
+        self:positionPages()
 
         return self
     end
@@ -3797,64 +3925,38 @@ local Window = {}
     end
 
     --[[--
-    Positions the content children frames inside the content frame.
+    Positions the pages inside the content frame.
 
     This is an internal method and it shouldn't be called by addons.
 
     @local
     --]]
-    function Window:positionContentChildFrames()
-        -- sets the first relative frame the content frame itself
-        -- but after the first child, the relative frame will be the last
-        local lastRelativeTo = self.contentFrame
-        local totalChildrenHeight = 0
+    function Window:positionPages()
+        for _, windowPage in pairs(self.pages) do
+            local child = windowPage.contentFrame
 
-        for _, child in ipairs(self.contentChildren) do
             child:SetParent(self.contentFrame)
-            child:SetPoint('TOPLEFT', lastRelativeTo, lastRelativeTo == self.contentFrame and 'TOPLEFT' or 'BOTTOMLEFT', 0, 0)
-            child:SetPoint('TOPRIGHT', lastRelativeTo, lastRelativeTo == self.contentFrame and 'TOPRIGHT' or 'BOTTOMRIGHT', 0, 0)
-
-            lastRelativeTo = child
-            totalChildrenHeight = totalChildrenHeight + child:GetHeight()
+            child:SetPoint('TOPLEFT', self.contentFrame, 'TOPLEFT', 0, 0)
+            child:SetPoint('TOPRIGHT', self.contentFrame, 'TOPRIGHT', 0, 0)
         end
-
-        self.contentFrame:SetHeight(totalChildrenHeight)
     end
 
     --[[--
-    Sets the window's content, which is a table of frames.
+    Sets the active page in the Window.
 
-    The Stormwind Library Window was designed to accept a list of frames to
-    compose its content. When create() is called, a content frame wrapped by
-    a vertical scrollbar is created, but the content frame is empty.
-
-    This method is used to populate the content frame with the frames passed
-    in the frames parameter. The frames then will be positioned sequentially
-    from top to bottom, with the first frame being positioned at the top and
-    the last frame at the bottom. Their width will be the same as the content
-    frame's width and will grow horizontally to the right if the whole
-    window is resized.
-
-    Please, read the library documentation for more information on how to
-    work with the frames inside the window's content.
-
-    @tparam table frames The list of frames to be placed inside the content frame
-
-    @treturn Views.Windows.Window The window instance, for method chaining
-
-    @usage
-        local frameA = CreateFrame(...)
-        local frameB = CreateFrame(...)
-        local frameC = CreateFrame(...)
-
-        window:setContent({frameA, frameB, frameC})
+    This method basically hides all pages and shows the one with the given
+    page id and adjusts the content frame height to the current page height.
     ]]
-    function Window:setContent(frames)
-        self.contentChildren = frames
+    function Window:setActivePage(pageId)
+        self.__.arr:each(self.pages, function(windowPage)
+            if windowPage.pageId == pageId then
+                windowPage:show()
+                self.contentFrame:SetHeight(windowPage:getHeight())
+                return
+            end
 
-        if self.contentFrame then self:positionContentChildFrames() end
-
-        return self
+            windowPage:hide()
+        end)
     end
 
     --[[--
@@ -4123,5 +4225,141 @@ local Window = {}
     end
 -- end of Window
 
+--[[--
+WindowPage represents a page in a window content area.
+
+With the concept of pages, it's possible to have a single window handling
+multiple content areas, each one with its own set of frames and change pages
+to switch between them.
+
+@classmod Views.Windows.WindowPage
+]]
+local WindowPage = {}
+    WindowPage.__index = WindowPage
+    WindowPage.__ = self
+
+    self:addClass('WindowPage', WindowPage)
+
+    --[[--
+    WindowPage constructor.
+    ]]
+    function WindowPage.__construct(pageId)
+        local self = setmetatable({}, WindowPage)
+
+        self.pageId = pageId
+
+        return self
+    end
+
+    --[[--
+    Creates the page frame if it doesn't exist yet.
+
+    @treturn Views.Windows.WindowPage The window page instance, for method chaining
+    ]]
+    function WindowPage:create()
+        if self.contentFrame then return self end
+
+        self.contentFrame = self:createFrame()
+
+        return self
+    end
+
+    --[[--
+    This is just a facade method to call World of Warcraft's CreateFrame.
+
+    @local
+
+    @see Views.Windows.WindowPage.create
+
+    @treturn table The frame created by CreateFrame
+    ]]
+    function WindowPage:createFrame()
+        return CreateFrame('Frame', nil, UIParent, 'BackdropTemplate')
+    end
+
+    --[[--
+    Gets the page's height.
+    ]]
+    function WindowPage:getHeight()
+        return self.contentFrame:GetHeight()
+    end
+
+    --[[--
+    Hides the page frame.
+    ]]
+    function WindowPage:hide()
+        self.contentFrame:Hide()
+    end
+
+    --[[--
+    Positions the children frames inside the page.
+
+    This is an internal method and it shouldn't be called by addons.
+
+    @local
+    --]]
+    function WindowPage:positionContentChildFrames()
+        -- sets the first relative frame the content frame itself
+        -- but after the first child, the relative frame will be the last
+        local lastRelativeTo = self.contentFrame
+        local totalChildrenHeight = 0
+
+        for _, child in ipairs(self.contentChildren) do
+            child:SetParent(self.contentFrame)
+            child:SetPoint('TOPLEFT', lastRelativeTo, lastRelativeTo == self.contentFrame and 'TOPLEFT' or 'BOTTOMLEFT', 0, 0)
+            child:SetPoint('TOPRIGHT', lastRelativeTo, lastRelativeTo == self.contentFrame and 'TOPRIGHT' or 'BOTTOMRIGHT', 0, 0)
+
+            lastRelativeTo = child
+            totalChildrenHeight = totalChildrenHeight + child:GetHeight()
+        end
+
+        self.contentFrame:SetHeight(totalChildrenHeight)
+    end
+
+    --[[--
+    Sets the page's content, which is a table of frames.
+
+    The Stormwind Library Window Page was designed to accept a list of frames
+    to compose its content.
+
+    This method is used to populate the content frame with the frames passed
+    in the frames parameter. The frames then will be positioned sequentially
+    from top to bottom, with the first frame being positioned at the top and
+    the last frame at the bottom. Their width will be the same as the content
+    frame's width and will grow horizontally to the right if the whole
+    page is resized.
+
+    Please, read the library documentation for more information on how to
+    work with the frames inside the page's content.
+
+    @tparam table frames The list of frames to be placed inside the page
+
+    @treturn Views.Windows.WindowPage The window page instance, for method chaining
+
+    @usage
+        local frameA = CreateFrame(...)
+        local frameB = CreateFrame(...)
+        local frameC = CreateFrame(...)
+
+        page:setContent({frameA, frameB, frameC})
+    ]]
+    function WindowPage:setContent(frames)
+        self.contentChildren = frames
+
+        if self.contentFrame then self:positionContentChildFrames() end
+
+        return self
+    end
+
+    --[[--
+    Shows the page frame.
+    ]]
+    function WindowPage:show()
+        self.contentFrame:Show()
+    end
+-- end of WindowPage
+
+
+self:invokeLoadCallbacks()
     return self
 end

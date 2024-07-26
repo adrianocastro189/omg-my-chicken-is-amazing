@@ -51,6 +51,10 @@ only for now. Hope to find a solution in the future.
 
 ## Changelog
 
+### yyyy.mm.dd - version 1.0.0
+
+* Update Stormwind Library to version 1.10.0
+
 ### 2024.07.24 - version 0.0.4-alpha
 
 * Update TOC interface number for Retail
