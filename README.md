@@ -7,6 +7,16 @@ inventory tracking structure introduced in [Stormwind Library v1.4.0](https://gi
 Although created as an experiment, the addon will probably be polished to serve
 as a real mod for the game. Only time will tell.
 
+## ⚠️ Plugin deactivation
+
+Due to limitations in the `SendChatMessage` API, this project was deactivated 
+in July 26, 2024. The plugin was designed to make the player character interact
+with the chicken in some ways, but the limitations in the API made it 
+impossible to achieve the desired results.
+
+The plugin may be reactivated in the future if a solution is found to the
+current limitations.
+
 ## ❤️ Support Stormwind Library
 
 If you like this addon and want to support the library project behind it, you 
@@ -51,10 +61,11 @@ only for now. Hope to find a solution in the future.
 
 ## Changelog
 
-### yyyy.mm.dd - version 1.0.0
+### 2024.07.26 - version 1.0.0
 
 * Fix a typo when lamenting the chicken absence
 * Makes the player yell how amazing the chicken is when it's summoned
+* Plugin deactivation due to limitations in the SendChatMessage API
 * Update Stormwind Library to version 1.10.0
 
 ### 2024.07.24 - version 0.0.4-alpha
