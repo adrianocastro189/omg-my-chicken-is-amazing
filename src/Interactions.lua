@@ -25,23 +25,6 @@ local Interactions = {}
     end
 
     --[[
-    Laments something about the player's Westfall chicken.
-    ]]
-    function Interactions:lament()
-        local repository = AmazingChicken.chickenFinderRepository
-        
-        if not repository:playerHasChicken() then
-            self:lamentLackOfChicken()
-            return
-        end
-
-        if not repository:isChickenSummoned() then
-            self:lamentChickenAbsence()
-            return
-        end
-    end
-
-    --[[
     Laments the fact that the player's Westfall chicken is not summoned.
     ]]
     function Interactions:lamentChickenAbsence()
@@ -56,11 +39,29 @@ local Interactions = {}
     end
 
     --[[
-    May lament something about the player's Westfall chicken.
+    May lament something about the player's Westfall chicken if the player
+    doesn't have one or if it's not summoned.
     ]]
     function Interactions:maybeLament()
+        local repository = AmazingChicken.chickenFinderRepository
+        
+        if not repository:playerHasChicken() then
+            self:lamentLackOfChicken()
+            return
+        end
+
+        if not repository:isChickenSummoned() then
+            self:lamentChickenAbsence()
+            return
+        end
+    end
+
+    --[[
+    May lament something about the player's Westfall chicken.
+    ]]
+    function Interactions:randomlyLament()
         if self:randomNumber() <= 0.1 then
-            self:lament()
+            self:maybeLament()
         end
     end
 
@@ -81,7 +82,7 @@ local Interactions = {}
     ]]
     function Interactions:registerInterval()
         self:createInterval()
-            :setCallback(function () self:maybeLament() end)
+            :setCallback(function () self:randomlyLament() end)
             :setSeconds(60)
             :start()
         
