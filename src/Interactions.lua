@@ -25,6 +25,13 @@ local Interactions = {}
     end
 
     --[[
+    Express the player's amazement with the Westfall chicken.
+    ]]
+    function Interactions:exclaim()
+        AmazingChicken.output:yell('OMG! My Chicken is amazing!')
+    end
+
+    --[[
     Laments the fact that the player's Westfall chicken is not summoned.
     ]]
     function Interactions:lamentChickenAbsence()

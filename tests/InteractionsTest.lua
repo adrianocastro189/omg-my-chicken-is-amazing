@@ -13,6 +13,21 @@ TestInteractions = BaseTestClass:new()
         lu.assertNotIsNil(instance:createInterval())
     end
 
+    -- @covers Interactions:exclaim()
+    function TestInteractions:testExclaim()
+        local instance = AmazingChicken:new('Omg/Interactions')
+
+        AmazingChicken.output = {
+            yell = function (self, message)
+                AmazingChicken.messageArg = message
+            end
+        }
+
+        instance:exclaim()
+
+        lu.assertEquals(AmazingChicken.messageArg, 'OMG! My Chicken is amazing!')
+    end
+
     -- @covers Interactions:lamentChickenAbsence()
     -- @covers Interactions:lamentLackOfChicken()
     function TestInteractions:testLamentWithMessagesSaid()
